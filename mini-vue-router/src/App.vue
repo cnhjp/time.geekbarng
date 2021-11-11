@@ -1,40 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  <a href="#">click me</a>
+  <button @click="useTo('/home')">to home</button>
+  <button @click="routerTo('/about')">to about</button>
+  <router-link to="/card"></router-link>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { getCurrentInstance } from "@vue/runtime-core"
+import { useRouter } from "./router/lib/my-router"
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  },
+export default ({
   setup() {
-    onMounted(() => {
-      window.addEventListener('hashchange', (e: Event) => {
-        console.log(1)
-        console.log(e)
-      })
-      window.addEventListener('popstate', (e: Event) => {
-        console.log(2)
-        console.log(e)
-      })
-    })
-  }
-});
+    const router = useRouter()
+    const $router = (getCurrentInstance()?.proxy as any).$router
+    return {
+      useTo: (path: string) => {
+        router.push(path)
+      },
+      routerTo: (path: string) => {
+        $router.push(path)
+      }
+    }
+  },
+})
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
